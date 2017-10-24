@@ -110,7 +110,8 @@ class Bitfinex {
             balances = _.filter(balances, b => b.type === 'exchange')
             balances = _.reduce(balances, (result, b) => {
               let asset = b.currency.toUpperCase()
-              asset = (alt = Bitfinex.alts[asset]) ? alt : asset
+              let alt = Bitfinex.alts[asset]
+              asset = alt ? alt : asset
               let balance = parseFloat(b.amount)
               let available = parseFloat(b.available)
 
