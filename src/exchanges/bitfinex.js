@@ -102,28 +102,18 @@ class Bitfinex {
 
   balances(opts) {
     return new Promise((resolve, reject) => {
-      this.bitfinex.wallet_balances(
-        (err, balances) => {
-          if(err) {
-            reject(err.message)
-          } else {
-            balances = _.filter(balances, b => b.type === 'exchange')
-            balances = _.reduce(balances, (result, b) => {
-              let asset = b.currency.toUpperCase()
-              let alt = Bitfinex.alts[asset]
-              asset = alt ? alt : asset
-              let balance = parseFloat(b.amount)
-              let available = parseFloat(b.available)
+      let filterBalances = (balances) => {
+        balances = _.filter(balances, ({ type }) => type === opts.type)
+        balances = _.reduce(balances, (result, b) => {
+          let asset = b.currency.toUpperCase(), alt
+          asset = (alt = Bitfinex.alts[asset]) ? alt : asset
+          let balance = parseFloat(b.amount)
+          let available = parseFloat(b.available)
 
-              result[asset] = {
-                balance,
-                available,
-                pending: balance - available
-              }
-
-              return result
-            }, {})
-            resolve(balances)
+          result[asset] = {
+            balance,
+            available,
+            pending: balance - available
           }
 
           return result
