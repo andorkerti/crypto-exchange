@@ -1,4 +1,4 @@
-const Api = require('node.bittrex.api')
+const Api = require('node-bittrex-api')
 const _ = require('lodash')
 
 const Pair = require('../../lib/pair')
